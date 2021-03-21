@@ -1,8 +1,7 @@
 .WorkoutContainer {
-    max-width: 1224px;
+    max-width: 1300px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
     margin: 0 auto;
-    
 }
