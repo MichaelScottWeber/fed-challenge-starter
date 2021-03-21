@@ -4,7 +4,12 @@ import DistanceIcon from "../../img/DistanceIcon.svg";
 import PlaylistIcon from "../../img/PlaylistIcon.svg";
 import "../Workout/Workout.css";
 
-const Workout = ({ data, selected, handleSelectedWorkout }) => {
+const Workout = ({
+    data,
+    selected,
+    handleSelectedWorkout,
+    handleLoadingChange,
+}) => {
     const formatDistance = (num) => {
         const nfObject = new Intl.NumberFormat("en-US");
         return nfObject.format(num);
@@ -45,7 +50,7 @@ const Workout = ({ data, selected, handleSelectedWorkout }) => {
     };
 
     return (
-        <div
+        <li
             className={selected ? "Workout selected" : "Workout"}
             onClick={() => handleSelectedWorkout(data.name)}
         >
@@ -56,6 +61,7 @@ const Workout = ({ data, selected, handleSelectedWorkout }) => {
                         className='thumb-img'
                         src={data.thumbImg}
                         alt={data.name}
+                        onLoad={handleLoadingChange}
                     />
                 </div>
             </div>
@@ -67,6 +73,7 @@ const Workout = ({ data, selected, handleSelectedWorkout }) => {
                             className='trainer-img'
                             src={data.trainerImg}
                             alt={`Trainer for the ${data.name} workout`}
+                            onLoad={handleLoadingChange}
                         />
                     </div>
                     <div className='stats-container'>
@@ -80,7 +87,7 @@ const Workout = ({ data, selected, handleSelectedWorkout }) => {
                     {selected ? <a href={data.detailsUrl}>VIEW DETAILS</a> : ""}
                 </div>
             </div>
-        </div>
+        </li>
     );
 };
 

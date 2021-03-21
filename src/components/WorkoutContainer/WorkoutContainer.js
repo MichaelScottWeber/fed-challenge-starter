@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Workout from "../Workout/Workout";
+import LoadingScreen from "../LoadingScreen/LoadingScreen";
 import "../WorkoutContainer/WorkoutContainer.css";
 import TwentyMinutesToTonedThumb from "../../img/20-minutes-to-toned-thumb.jpg";
 import TwentyMinutesToTonedTrainer from "../../img/20-minutes-to-toned-trainer.jpg";
@@ -18,8 +19,20 @@ import ShredAndBurnTrainer from "../../img/shred-and-burn-trainer.jpg";
 import SlowPullsThumb from "../../img/slow-pulls-thumb.jpg";
 import SlowPullsTrainer from "../../img/slow-pulls-trainer.jpg";
 
+function imagesLoaded(parentNode) {
+    const imgElements = parentNode.querySelectorAll("img");
+    console.log(imgElements);
+    for (const img of imgElements) {
+        if (!img.complete) {
+            return false;
+        }
+    }
+    return true;
+}
+
 class WorkoutContainer extends Component {
     state = {
+        loading: true,
         selectedWorkout: "",
         workouts: [
             {
@@ -102,8 +115,21 @@ class WorkoutContainer extends Component {
         ],
     };
 
+    handleLoadingChange = () => {
+        this.setState({
+            loading: !imagesLoaded(this.listElement),
+        });
+    };
+
     handleSelectedWorkout = (workout) => {
         this.setState({ selectedWorkout: workout });
+    };
+
+    renderLoadingScreen = () => {
+        if (!this.state.loading) {
+            return null;
+        }
+        return <LoadingScreen />;
     };
 
     render() {
@@ -114,11 +140,28 @@ class WorkoutContainer extends Component {
                     data={workout}
                     selected={workout.name === this.state.selectedWorkout}
                     handleSelectedWorkout={this.handleSelectedWorkout}
+                    handleLoadingChange={this.handleLoadingChange}
                 />
             );
         });
 
-        return <div className='WorkoutContainer'>{workoutList}</div>;
+        return (
+            <div>
+                {this.renderLoadingScreen()}
+                <ul
+                    className={
+                        this.state.loading
+                            ? "WorkoutContainer hide"
+                            : "WorkoutContainer"
+                    }
+                    ref={(element) => {
+                        this.listElement = element;
+                    }}
+                >
+                    {workoutList}
+                </ul>
+            </div>
+        );
     }
 }
 
